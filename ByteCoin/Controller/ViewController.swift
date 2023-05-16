@@ -33,7 +33,8 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate  {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         currencyLabel.text = coinManager.currencyArray[row]
+        coinManager.fetchURL(currencyName: coinManager.currencyArray[row])
         return coinManager.currencyArray[row]
     }
-    
+
 }
