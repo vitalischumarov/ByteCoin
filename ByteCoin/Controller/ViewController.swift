@@ -33,11 +33,18 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate  {
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+//        print("function pickerView was called")
+//        currencyLabel.text = coinManager.currencyArray[row]
+//        coinManager.fetchURL(currencyName: coinManager.currencyArray[row])
+//        return coinManager.currencyArray[row]
+          return coinManager.currencyArray[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         currencyLabel.text = coinManager.currencyArray[row]
         coinManager.fetchURL(currencyName: coinManager.currencyArray[row])
-        return coinManager.currencyArray[row]
     }
-
+    
 }
 
 extension ViewController: CoinProtocol {
