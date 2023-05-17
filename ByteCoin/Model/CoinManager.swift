@@ -11,7 +11,10 @@ struct CoinManager {
     
     let baseURL = "https://rest.coinapi.io/v1/exchangerate/BTC"
     let apiKey = "773CB6E0-1BB5-4989-A717-D75FDC5139E0"
-    let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
+    let currencyArray = ["AUD", "BRL","CAD","CNY","EUR"]
+//    ,"GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"
+    
+    var delegate: CoinProtocol?
     
     func fetchURL(currencyName: String) {
         let urlString = ("\(baseURL)/\(currencyName)?apikey=\(apiKey)")
@@ -25,11 +28,27 @@ struct CoinManager {
                 if (error != nil) {
                     print("Error message: \(error)")
                 } else {
-                    let dataString = String(data: data!, encoding: .utf8)
-                    print(dataString)
+                    if let safeData = data {
+                        if let priceData = self.parseJASON(from: safeData) {
+                            delegate?.getPrice(value: priceData)
+                        } else {
+                            print("nil")
+                        }
                     }
+                }
             }
             task.resume()
+        }
+    }
+    
+    func parseJASON(from coinData: Data) -> Double? {
+        let decoder = JSONDecoder()
+        do {
+            let decoderCoin = try decoder.decode(CoinModel.self, from: coinData)
+            return decoderCoin.rate
+        } catch {
+            print("error")
+            return nil
         }
     }
 }
